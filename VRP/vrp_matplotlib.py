@@ -238,12 +238,12 @@ def vrp_matplotlib(Greedy=True):
                 tour1, _ = agent(batch, n_nodes * 2, False, T)
                 cost = reward1(batch.x, tour1.detach(), n_nodes)
 
-                id = np.array(cost.cpu()).argmin()
+                minimum_cost_index = np.array(cost.cpu()).argmin()
                 m_cost = np.array(cost.cpu()).min()
                 tour1 = tour1.reshape(batch_size1, -1)
                 if m_cost < min_cost:
                     min_cost = m_cost
-                    min_tour = tour1[id]
+                    min_tour = tour1[minimum_cost_index]
 
         tour = min_tour.unsqueeze(-2)
 
@@ -251,7 +251,7 @@ def vrp_matplotlib(Greedy=True):
     for i, (data, tour) in enumerate(zip(data_loder, tour)):
         if Greedy:
             # print(data.x, data.demand, tour)
-            _fig, ax = plt.subplots(figsize=(10, 10))
+            fig, ax = plt.subplots(figsize=(10, 10))
             plot_vehicle_routes(
                 data,
                 tour,
