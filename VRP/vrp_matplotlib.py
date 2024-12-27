@@ -48,7 +48,7 @@ def plot_vehicle_routes(
     demands = data.demand.cpu().numpy() * 10
     demands = demands[1:]
 
-    capacity = data.capacity * 10
+    capacity: np.ndarray = data.capacity * 10
 
     x_dep, y_dep = depot
     ax1.plot(x_dep, y_dep, "sk", markersize=markersize * 4, label="Depot")
@@ -81,15 +81,14 @@ def plot_vehicle_routes(
         for (x, y), d in zip(coords, route_demands):
             dist += np.sqrt((x - x_prev) ** 2 + (y - y_prev) ** 2)
 
-            cap_rects.append(Rectangle((x, y), 0.01, 0.1))
-            used_rects.append(
-                Rectangle((x, y), 0.01, 0.1 * total_route_demand / capacity)
-            )
-            dem_rects.append(
-                Rectangle(
-                    (x, y + 0.1 * cum_demand / capacity), 0.01, 0.1 * d / capacity
-                )
-            )
+            height_cap_rect = 0.1
+            height_used_rect = (0.1 * total_route_demand / capacity).item()
+            height_dem_rect = (0.1 * d / capacity).item()
+            y_dem_rect = (y + 0.1 * cum_demand / capacity).item()
+
+            cap_rects.append(Rectangle((x, y), 0.01, height_cap_rect))
+            used_rects.append(Rectangle((x, y), 0.01, height_used_rect))
+            dem_rects.append(Rectangle((x, y_dem_rect), 0.01, height_dem_rect))
 
             x_prev, y_prev = x, y
             cum_demand += d
@@ -134,7 +133,6 @@ def plot_vehicle_routes(
 
     ax1.legend(handles=qvs)
     plt.legend(loc=1)
-    print("Shapes:", len(cap_rects), len(used_rects), len(dem_rects))
     pc_cap = PatchCollection(
         cap_rects, facecolor="whitesmoke", alpha=1.0, edgecolor="lightgray"
     )
