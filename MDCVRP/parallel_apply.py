@@ -1,8 +1,9 @@
 import threading
+
 import torch
+from torch._utils import ExceptionWrapper
 from torch.cuda._utils import _get_device_index
 from torch.cuda.amp import autocast
-from torch._utils import ExceptionWrapper
 
 
 def get_a_var(obj):
@@ -20,7 +21,7 @@ def get_a_var(obj):
     return None
 
 
-def parallel_apply(modules, inputs,steps,greedys, kwargs_tup=None, devices=None):
+def parallel_apply(modules, inputs, steps, greedys, kwargs_tup=None, devices=None):
     r"""Applies each `module` in :attr:`modules` in parallel on arguments
     contained in :attr:`inputs` (positional) and :attr:`kwargs_tup` (keyword)
     on each of :attr:`devices`.
@@ -45,7 +46,10 @@ def parallel_apply(modules, inputs,steps,greedys, kwargs_tup=None, devices=None)
     devices = [_get_device_index(x, True) for x in devices]
     lock = threading.Lock()
     results = {}
-    grad_enabled, autocast_enabled = torch.is_grad_enabled(), torch.is_autocast_enabled()
+    grad_enabled, autocast_enabled = (
+        torch.is_grad_enabled(),
+        torch.is_autocast_enabled(),
+    )
 
     def _worker(i, module, input, kwargs, device=None):
         torch.set_grad_enabled(grad_enabled)
@@ -56,19 +60,22 @@ def parallel_apply(modules, inputs,steps,greedys, kwargs_tup=None, devices=None)
                 # this also avoids accidental slicing of `input` if it is a Tensor
                 if not isinstance(input, (list, tuple)):
                     input = (input,)
-                output = module(*input,steps,greedys, **kwargs)
+                output = module(*input, steps, greedys, **kwargs)
             with lock:
                 results[i] = output
         except Exception:
             with lock:
                 results[i] = ExceptionWrapper(
-                    where="in replica {} on device {}".format(i, device))
+                    where="in replica {} on device {}".format(i, device)
+                )
 
     if len(modules) > 1:
-        threads = [threading.Thread(target=_worker,
-                                    args=(i, module, input, kwargs, device))
-                   for i, (module, input, kwargs, device) in
-                   enumerate(zip(modules, inputs,kwargs_tup, devices))]
+        threads = [
+            threading.Thread(target=_worker, args=(i, module, input, kwargs, device))
+            for i, (module, input, kwargs, device) in enumerate(
+                zip(modules, inputs, kwargs_tup, devices)
+            )
+        ]
 
         for thread in threads:
             thread.start()

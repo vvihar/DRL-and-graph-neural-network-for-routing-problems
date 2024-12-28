@@ -1,12 +1,13 @@
 import math
 
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
+from torch import nn
 from torch.distributions.categorical import Categorical
+from torch.nn import functional as F
 from torch_geometric.nn import MessagePassing
 from torch_geometric.utils import softmax
-from vrpUpdate import update_mask, update_state
+
+from VRP.vrpUpdate import update_mask, update_state
 
 INIT = False
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

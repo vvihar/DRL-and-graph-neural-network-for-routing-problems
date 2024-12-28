@@ -7,11 +7,12 @@ from collections import OrderedDict
 import numpy as np
 import torch
 from create_vrp import create_instance, reward1
-from VRP_Actor import Model
+from torch_geometric.data import Data, DataLoader
+
+from VRP.VRP_Actor import Model
 
 n_nodes = 102
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-from torch_geometric.data import Data, DataLoader
 
 
 def rollout(model, dataset, T=1, Sample=False):

@@ -1,7 +1,4 @@
-
-
 class Depot:
-
     def __init__(self, max_vehicles, max_duration, max_load):
         self.pos = (0, 0)
         self.max_vehicles = max_vehicles
@@ -12,7 +9,6 @@ class Depot:
 
 
 class Customer:
-
     def __init__(self, cid, x, y, service_duration, demand):
         self.id = cid
         self.pos = (x, y)

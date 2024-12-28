@@ -1,20 +1,16 @@
 import os
-import sys
 from collections import OrderedDict
 from pathlib import Path
 
 import numpy as np
 import torch
-from create_vrp import reward2
 from matplotlib import pyplot as plt
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 from torch_geometric.data import Data, DataLoader
 
-# No module named 'VRP' error
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-
-from VRP_Actor import Model
+from VRP.create_vrp import reward2
+from VRP.VRP_Actor import Model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_nodes = 101

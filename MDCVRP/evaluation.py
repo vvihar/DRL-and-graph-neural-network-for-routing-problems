@@ -5,8 +5,9 @@ import time
 from collections import OrderedDict
 
 import torch
-from create_vrp import create_data, reward1
-from VRP_Actor import Model
+
+from VRP.create_vrp import create_data, reward1
+from VRP.VRP_Actor import Model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
