@@ -1,5 +1,7 @@
 import os
+import sys
 from collections import OrderedDict
+from pathlib import Path
 
 import numpy as np
 import torch
@@ -8,10 +10,14 @@ from matplotlib import pyplot as plt
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 from torch_geometric.data import Data, DataLoader
+
+# No module named 'VRP' error
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+
 from VRP_Actor import Model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-n_nodes = 102
+n_nodes = 101
 
 
 def discrete_cmap(N, base_cmap=None):
@@ -185,10 +191,20 @@ def plot_vehicle_routes(
 
 
 def vrp_matplotlib(Greedy=True):
-    node_ = np.loadtxt("vrp100_test_data.csv", dtype=np.float, delimiter=",")
-    demand_ = np.loadtxt("vrp100_demand.csv", dtype=np.float, delimiter=",")
-    capacity_ = np.loadtxt("vrp100_capacity.csv", dtype=np.float, delimiter=",")
+    current_dir = Path()
+    test_data_dir = current_dir / "VRP" / "test_data"
 
+    node_ = np.loadtxt(
+        test_data_dir / "vrp100_test_data.csv", dtype=np.float32, delimiter=","
+    )
+    demand_ = np.loadtxt(
+        test_data_dir / "vrp100_demand.csv", dtype=np.float32, delimiter=","
+    )
+    capacity_ = np.loadtxt(
+        test_data_dir / "vrp100_capacity.csv", dtype=np.float32, delimiter=","
+    )
+
+    print(node_.shape, demand_.shape, n_nodes)
     node_, demand_ = node_.reshape(-1, n_nodes, 2), demand_.reshape(-1, n_nodes)
     data_size = node_.shape[0]
 
