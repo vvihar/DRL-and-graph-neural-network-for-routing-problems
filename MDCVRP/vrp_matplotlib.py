@@ -186,7 +186,7 @@ def plot_vehicle_routes(
 
 
 def vrp_matplotlib(Greedy=True):
-    current_dir = Path()
+    current_dir = Path(__file__).resolve().parent.parent
     test_data_dir = current_dir / "VRP" / "test_data"
 
     node_ = np.loadtxt(
