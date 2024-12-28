@@ -9,8 +9,8 @@ from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 from torch_geometric.data import Data, DataLoader
 
-from VRP.create_vrp import reward2
-from VRP.VRP_Actor import Model
+from MDCVRP.create_vrp import reward2
+from MDCVRP.VRP_Actor import Model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_nodes = 101

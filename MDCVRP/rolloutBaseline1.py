@@ -1,9 +1,10 @@
 import copy
 
 import torch
-from create_vrp import reward1
 from scipy.stats import ttest_rel
 from torch.nn import DataParallel
+
+from MDCVRP.create_vrp import reward1
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 

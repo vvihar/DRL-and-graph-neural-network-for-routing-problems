@@ -8,9 +8,9 @@ import torch
 import torch.optim as optim
 from torch.optim.lr_scheduler import LambdaLR
 
-from VRP.create_vrp import create_data, reward1
-from VRP.rolloutBaseline1 import RolloutBaseline
-from VRP.VRP_Actor import Model
+from MDCVRP.create_vrp import create_data, reward1
+from MDCVRP.rolloutBaseline1 import RolloutBaseline
+from MDCVRP.VRP_Actor import Model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 # device = torch.device('cpu')
