@@ -4,13 +4,12 @@ from pathlib import Path
 
 import numpy as np
 import torch
+from create_vrp import reward2
 from matplotlib import pyplot as plt
 from matplotlib.collections import PatchCollection
 from matplotlib.patches import Rectangle
 from torch_geometric.data import Data, DataLoader
-
-from MDCVRP.create_vrp import reward2
-from MDCVRP.VRP_Actor import Model
+from VRP_Actor import Model
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_nodes = 101
